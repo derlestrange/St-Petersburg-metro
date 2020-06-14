@@ -4,28 +4,32 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class TestRouteCalculator extends TestCase {
 
     /**
      * Line 1: i, i1, i2;
      * Line 2: k, k1, k2;
      * Line 3; j, j1, j2;
-     *
+     * <p>
      * Connections: j1/i1, j3/k1;
-     *
-     *                                 line2
-     *                                   j
-     *                                   |
-     *                                   |
-     *      line1                i — — j1/i1 — — i2
-     *                                   |
-     *                                   |
-     *      line3                k — — j2/k1 — — k2
-     *
+     * <p>
+     * line2
+     * j
+     * |
+     * |
+     * line1                i — — j1/i1 — — i2
+     * |
+     * |
+     * line3                k — — j2/k1 — — k2
      */
 
-    RouteCalculator routeCalculator;
-    StationIndex stationIndex;
+    public RouteCalculator routeCalculator;
+    public StationIndex stationIndex;
+    public List<Station> path;
 
     //lines with stations
     Line line1;
@@ -37,7 +41,7 @@ public class TestRouteCalculator extends TestCase {
     Line line3;
     Station k, k1, k2;
 
-    @Before
+
     public void setUp() {
 
         line1 = new Line(1, "FirstLine");
@@ -55,13 +59,30 @@ public class TestRouteCalculator extends TestCase {
         k1 = new Station("k1", line3);
         k2 = new Station("k2", line3);
 
+        routeCalculator = new RouteCalculator(creatingStationIndex());
+
     }
 
     @Test
-    public void testCalculateDuration(){
-//        double actual = RouteCalculator.calculateDuration(path);
-//        double expected = 8.5;
-//        assertEquals(expected, actual);
+    public void testCalculateDuration() {
+        path = Stream.of(i, i1, i2).collect(Collectors.toList());
+        double expected = RouteCalculator.calculateDuration(path);
+        double actual = 5;
+        assertEquals(expected, actual);
+    }
+
+
+    //creating station index and adding lines, stations and connections
+    public StationIndex creatingStationIndex() {
+        stationIndex = new StationIndex();
+
+        Stream.of(i, i1, i2, j, j1, j2, k, k1, k2)
+                .peek(s -> s.getLine().addStation(s))
+                .forEach(stationIndex::addStation);
+
+        Stream.of(line1, line2, line3).forEach(stationIndex::addLine);
+
+        return stationIndex;
     }
 
 
