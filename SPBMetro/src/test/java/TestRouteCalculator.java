@@ -30,6 +30,7 @@ public class TestRouteCalculator extends TestCase {
     public RouteCalculator routeCalculator;
     public StationIndex stationIndex;
     public List<Station> path;
+    public List<Station> pathNoConnections;
 
     //lines with stations
     Line line1;
@@ -65,10 +66,16 @@ public class TestRouteCalculator extends TestCase {
 
     @Test
     public void testCalculateDuration() {
-        path = Stream.of(i, i1, i2).collect(Collectors.toList());
+        path = Stream.of(i, i1, i2, j, j1, j2, k, k1, k2).collect(Collectors.toList());
         double expected = RouteCalculator.calculateDuration(path);
-        double actual = 5;
+        double actual = 22;
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetShortRoutes(){
+        pathNoConnections = Stream.of(i, i1, i2).collect(Collectors.toList());
+        //
     }
 
 
