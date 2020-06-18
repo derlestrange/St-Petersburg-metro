@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
 public class TestRouteCalculator extends TestCase {
 
     /**
-     * Line 1: i, i1, i2;
+     * Line 1: i, i1, i2, i3, i4;
      * Line 2: k, k1, k2;
      * Line 3; j, j1, j2;
      *
@@ -21,7 +22,7 @@ public class TestRouteCalculator extends TestCase {
      *                              j
      *                              |
      *                              |
-     *             line1    i — — j1/i1 — — i2
+     *             line1    i — — j1/i1 — — i2 -- i3 -- i4
      *                              |
      *                              |
      *             line3    k — — j2/k1 — — k2
@@ -38,7 +39,7 @@ public class TestRouteCalculator extends TestCase {
 
     //lines with stations
     public Line line1;
-    public Station i, i1, i2;
+    public Station i, i1, i2, i3, i4;
 
     public Line line2;
     public Station j, j1, j2;
@@ -53,6 +54,8 @@ public class TestRouteCalculator extends TestCase {
         i = new Station("i", line1);
         i1 = new Station("i1", line1);
         i2 = new Station("i2", line1);
+        i3 = new Station("i3", line1);
+        i4 = new Station("i4", line1);
 
         line2 = new Line(2, "SecondLine");
         j = new Station("j", line2);
@@ -84,9 +87,9 @@ public class TestRouteCalculator extends TestCase {
 
     @Test
     public void testGetShortRoutesOneConnection() {
-        pathOneConnections = Stream.of(i, i1, j1, j)
+        pathOneConnections = Stream.of(i4, i3, i2, i1, j1, j)
                 .collect(Collectors.toList());
-        actualPathConnections = routeCalculator.getShortestRoute(i, j);
+        actualPathConnections = routeCalculator.getShortestRoute(i4, j);
         assertEquals(pathOneConnections, actualPathConnections);
     }
 
@@ -109,11 +112,17 @@ public class TestRouteCalculator extends TestCase {
     public StationIndex creatingStationIndex() {
         stationIndex = new StationIndex();
 
-        Stream.of(i, i1, i2, j, j1, j2, k, k1, k2)
+        Stream.of(i, i1, i2, i3, i4, j, j1, j2, k, k1, k2)
                 .peek(s -> s.getLine().addStation(s))
                 .forEach(stationIndex::addStation);
 
         Stream.of(line1, line2, line3).forEach(stationIndex::addLine);
+
+        List<Station> connections1 = Arrays.asList(i1, j1);
+        List<Station> connections2 = Arrays.asList(j2, k1);
+
+        stationIndex.addConnection(connections1);
+        stationIndex.addConnection(connections2);
 
         return stationIndex;
     }
