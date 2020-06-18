@@ -14,33 +14,37 @@ public class TestRouteCalculator extends TestCase {
      * Line 1: i, i1, i2;
      * Line 2: k, k1, k2;
      * Line 3; j, j1, j2;
-     * <p>
+     *
      * Connections: j1/i1, j3/k1;
-     * <p>
-     * line2
-     * j
-     * |
-     * |
-     * line1                i — — j1/i1 — — i2
-     * |
-     * |
-     * line3                k — — j2/k1 — — k2
+     *
+     *                            line2
+     *                              j
+     *                              |
+     *                              |
+     *             line1    i — — j1/i1 — — i2
+     *                              |
+     *                              |
+     *             line3    k — — j2/k1 — — k2
      */
 
     public RouteCalculator routeCalculator;
     public StationIndex stationIndex;
+
     public List<Station> path;
     public List<Station> pathNoConnections;
+    public List<Station> pathOneConnections;
+    public List<Station> pathTwoConnections;
+    public List<Station> actualPathConnections;
 
     //lines with stations
-    Line line1;
-    Station i, i1, i2;
+    public Line line1;
+    public Station i, i1, i2;
 
-    Line line2;
-    Station j, j1, j2;
+    public Line line2;
+    public Station j, j1, j2;
 
-    Line line3;
-    Station k, k1, k2;
+    public Line line3;
+    public Station k, k1, k2;
 
 
     public void setUp() {
@@ -65,19 +69,41 @@ public class TestRouteCalculator extends TestCase {
     }
 
     @Test
+    public void testGetShortRoutesOnTheLine(){
+        pathNoConnections = Stream.of(i, i1, i2).collect(Collectors.toList());
+        actualPathConnections = routeCalculator.getShortestRoute(i, i2);
+        assertEquals(pathNoConnections, actualPathConnections);
+    }
+
+//    @Test
+//    public void testGetShortestRouteWithOneConnections(){
+//        pathOneConnections = Stream.of(j, j1, i1, i).collect(Collectors.toList());
+//        actualPathConnections = routeCalculator.getShortestRoute(j, i);
+//        assertEquals(pathOneConnections, actualPathConnections);
+//    }
+
+    @Test
+    public void testGetShortRoutesOneConnection() {
+        pathOneConnections = Stream.of(i, i1, j1, j)
+                .collect(Collectors.toList());
+        actualPathConnections = routeCalculator.getShortestRoute(i, j);
+        assertEquals(pathOneConnections, actualPathConnections);
+    }
+
+    @Test
+    public void testGetShortestRouteWithTwoConnections(){
+        pathTwoConnections = Stream.of(i, i1, j1, j2, k1, k).collect(Collectors.toList());
+        actualPathConnections = routeCalculator.getShortestRoute(i, k);
+        assertEquals(pathTwoConnections, actualPathConnections);
+    }
+
+    @Test
     public void testCalculateDuration() {
         path = Stream.of(i, i1, i2, j, j1, j2, k, k1, k2).collect(Collectors.toList());
         double expected = RouteCalculator.calculateDuration(path);
         double actual = 22;
         assertEquals(expected, actual);
     }
-
-    @Test
-    public void testGetShortRoutes(){
-        pathNoConnections = Stream.of(i, i1, i2).collect(Collectors.toList());
-        //
-    }
-
 
     //creating station index and adding lines, stations and connections
     public StationIndex creatingStationIndex() {
@@ -91,6 +117,4 @@ public class TestRouteCalculator extends TestCase {
 
         return stationIndex;
     }
-
-
 }
