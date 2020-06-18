@@ -78,25 +78,17 @@ public class TestRouteCalculator extends TestCase {
         assertEquals(pathNoConnections, actualPathConnections);
     }
 
-//    @Test
-//    public void testGetShortestRouteWithOneConnections(){
-//        pathOneConnections = Stream.of(j, j1, i1, i).collect(Collectors.toList());
-//        actualPathConnections = routeCalculator.getShortestRoute(j, i);
-//        assertEquals(pathOneConnections, actualPathConnections);
-//    }
-
     @Test
-    public void testGetShortRoutesOneConnection() {
-        pathOneConnections = Stream.of(i4, i3, i2, i1, j1, j)
-                .collect(Collectors.toList());
+    public void testGetShortestRouteWithOneConnections(){
+        pathOneConnections = Stream.of(i4, i3, i2, i1, j1, j).collect(Collectors.toList());
         actualPathConnections = routeCalculator.getShortestRoute(i4, j);
         assertEquals(pathOneConnections, actualPathConnections);
     }
 
     @Test
     public void testGetShortestRouteWithTwoConnections(){
-        pathTwoConnections = Stream.of(i, i1, j1, j2, k1, k).collect(Collectors.toList());
-        actualPathConnections = routeCalculator.getShortestRoute(i, k);
+        pathTwoConnections = Stream.of(i, i1, j1, j2, k1, k2).collect(Collectors.toList());
+        actualPathConnections = routeCalculator.getShortestRoute(i, k2);
         assertEquals(pathTwoConnections, actualPathConnections);
     }
 
