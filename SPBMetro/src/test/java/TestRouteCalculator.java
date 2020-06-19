@@ -1,7 +1,6 @@
 import core.Line;
 import core.Station;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -16,7 +15,7 @@ public class TestRouteCalculator extends TestCase {
      * Line 2: k, k1, k2;
      * Line 3; j, j1, j2;
      *
-     * Connections: j1/i1, j3/k1;
+     * Connections: j1/i1, j2/k1;
      *
      *                            line2
      *                              j
@@ -32,9 +31,6 @@ public class TestRouteCalculator extends TestCase {
     public StationIndex stationIndex;
 
     public List<Station> path;
-    public List<Station> pathNoConnections;
-    public List<Station> pathOneConnections;
-    public List<Station> pathTwoConnections;
     public List<Station> actualPathConnections;
 
     //lines with stations
@@ -71,32 +67,56 @@ public class TestRouteCalculator extends TestCase {
 
     }
 
+    /*testing shortest routes on the line
+     *
+     *             line1    i — — j1/i1 — — i2 -- i3 -- i4
+     *
+     */
+
     @Test
     public void testGetShortRoutesOnTheLine(){
-        pathNoConnections = Stream.of(i, i1, i2).collect(Collectors.toList());
-        actualPathConnections = routeCalculator.getShortestRoute(i, i2);
-        assertEquals(pathNoConnections, actualPathConnections);
+        path = Stream.of(i, i1, i2, i3, i4).collect(Collectors.toList());
+        actualPathConnections = routeCalculator.getShortestRoute(i, i4);
+        assertEquals(path, actualPathConnections);
     }
 
+    /*testing shortest routes with one connections
+
+     *                            line2
+     *                              j
+     *                              |
+     *                              |
+     *             line1          j1/i1 — — i2 -- i3 -- i4
+     *
+     */
     @Test
     public void testGetShortestRouteWithOneConnections(){
-        pathOneConnections = Stream.of(i4, i3, i2, i1, j1, j).collect(Collectors.toList());
+        path = Stream.of(i4, i3, i2, i1, j1, j).collect(Collectors.toList());
         actualPathConnections = routeCalculator.getShortestRoute(i4, j);
-        assertEquals(pathOneConnections, actualPathConnections);
+        assertEquals(path, actualPathConnections);
     }
 
+    /*testing shortest routes with two connections
+     *                            line2
+     *
+     *             line1    i — — j1/i1
+     *                              |
+     *                              |
+     *             line3          j2/k1 — — k2
+     */
     @Test
     public void testGetShortestRouteWithTwoConnections(){
-        pathTwoConnections = Stream.of(i, i1, j1, j2, k1, k2).collect(Collectors.toList());
+        path = Stream.of(i, i1, j1, j2, k1, k2).collect(Collectors.toList());
         actualPathConnections = routeCalculator.getShortestRoute(i, k2);
-        assertEquals(pathTwoConnections, actualPathConnections);
+        assertEquals(path, actualPathConnections);
     }
 
+    //testing calculate duration
     @Test
     public void testCalculateDuration() {
-        path = Stream.of(i, i1, i2, j, j1, j2, k, k1, k2).collect(Collectors.toList());
+        path = Stream.of(i, i1, i2, i3, i4, j, j1, j2, k, k1, k2).collect(Collectors.toList());
         double expected = RouteCalculator.calculateDuration(path);
-        double actual = 22;
+        double actual = 27;
         assertEquals(expected, actual);
     }
 
@@ -118,4 +138,10 @@ public class TestRouteCalculator extends TestCase {
 
         return stationIndex;
     }
+
+//    @Override
+//    protected void tearDown() throws Exception {
+//        path.clear();
+//        actualPathConnections.clear();
+//    }
 }
