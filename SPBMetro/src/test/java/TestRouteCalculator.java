@@ -138,10 +138,4 @@ public class TestRouteCalculator extends TestCase {
 
         return stationIndex;
     }
-
-//    @Override
-//    protected void tearDown() throws Exception {
-//        path.clear();
-//        actualPathConnections.clear();
-//    }
 }

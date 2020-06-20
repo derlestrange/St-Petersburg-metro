@@ -96,7 +96,7 @@ public class RouteCalculator {
                 }
             }
         }
-        if (route.size() == 0) {
+        if (route.isEmpty()) {
             return null;
         }
         return route;
