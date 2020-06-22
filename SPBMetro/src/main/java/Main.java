@@ -10,8 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 public class Main
 {
+    private static final Logger logger = LogManager.getLogger();
+
     private static String dataFile = "src/main/resources/map.json";
     private static Scanner scanner;
 
@@ -20,7 +26,6 @@ public class Main
     public static void main(String[] args)
     {
         RouteCalculator calculator = getRouteCalculator();
-
         System.out.println("Программа расчёта маршрутов метрополитена Санкт-Петербурга\n");
         scanner = new Scanner(System.in);
         for(;;)
@@ -73,6 +78,7 @@ public class Main
             if(station != null) {
                 return station;
             }
+            logger.info("Станция не найдена " + line);
             System.out.println("Станция не найдена :(");
         }
     }
