@@ -26,5 +26,5 @@
         <appender-ref ref="SearchStationsNotFound"/>
         <appender-ref ref="Exception"/>
     </loggers>
-    
+
 </configuration>
