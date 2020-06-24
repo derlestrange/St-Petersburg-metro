@@ -16,9 +16,9 @@ import java.util.Scanner;
 
 public class Main {
     private static Logger logger;
-    private static final Marker SEARCH_EXISTING_STATIONS = MarkerManager.getMarker("Existing stations");
-    private static final Marker SEARCH_NOT_EXISTING_STATIONS = MarkerManager.getMarker("Not existing stations");
-    private static final Marker PROGRAM_EXCEPTIONS = MarkerManager.getMarker("Exceptions program");
+    private static final Marker SEARCH_EXISTING_STATIONS = MarkerManager.getMarker("SearchExistStations");
+    private static final Marker SEARCH_NOT_EXISTING_STATIONS = MarkerManager.getMarker("StationsNotFound");
+    private static final Marker PROGRAM_EXCEPTIONS = MarkerManager.getMarker("Exceptions");
 
     private static String dataFile = "src/main/resources/map.json";
     private static Scanner scanner;
