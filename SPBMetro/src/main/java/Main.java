@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     private static Logger logger;
+    private static Logger loggerStNotFound;
+    private static Logger loggerExceptions;
     private static final Marker SEARCH_EXISTING_STATIONS = MarkerManager.getMarker("SearchExistStations");
     private static final Marker SEARCH_NOT_EXISTING_STATIONS = MarkerManager.getMarker("StationsNotFound");
     private static final Marker PROGRAM_EXCEPTIONS = MarkerManager.getMarker("Exceptions");
@@ -27,6 +30,8 @@ public class Main {
 
     public static void main(String[] args) {
         logger = LogManager.getLogger();
+        loggerStNotFound = LogManager.getLogger("StationsNotFoundLogger");
+        loggerExceptions = LogManager.getLogger("ExceptionsLogger");
         RouteCalculator calculator = getRouteCalculator();
         System.out.println("Программа расчёта маршрутов метрополитена Санкт-Петербурга\n");
         scanner = new Scanner(System.in);
@@ -44,7 +49,7 @@ public class Main {
                 System.out.println("Длительность: " +
                         RouteCalculator.calculateDuration(route) + " минут");
             } catch (Exception e) {
-                logger.error(PROGRAM_EXCEPTIONS, "Exception: ", e);
+                loggerExceptions.error(PROGRAM_EXCEPTIONS, "Exception: ", e);
             }
         }
     }
@@ -78,7 +83,7 @@ public class Main {
             if (station != null) {
                 return station;
             }
-            logger.info(SEARCH_NOT_EXISTING_STATIONS, "Stations not found: " + line);
+            loggerStNotFound.info(SEARCH_NOT_EXISTING_STATIONS, "Stations not found: " + line);
             System.out.println("Станция не найдена :(");
         }
     }

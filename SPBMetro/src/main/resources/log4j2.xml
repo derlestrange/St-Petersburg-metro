@@ -18,10 +18,16 @@
     </appenders>
 
     <loggers>
-        <root level="trace">
-            <appender-ref ref="SearchStations" level="info"/>
-            <appender-ref ref="SearchStationsNotFound" level="info"/>
-            <appender-ref ref="Exception" level="error"/>
+        <logger name="StationsNotFoundLogger" level="info" >
+            <appender-ref ref="SearchStationsNotFound"/>
+        </logger>
+
+        <logger name="ExceptionsLogger" level="error" >
+            <appender-ref ref="Exception"/>
+        </logger>
+
+        <root level="info">
+            <appender-ref ref="SearchStations"/>
         </root>
     </loggers>
 </configuration>
